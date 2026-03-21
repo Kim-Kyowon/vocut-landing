@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보컷 (VoCut) - AI 음성/보컬 분리 서비스</title>
+    <meta name="description" content="YouTube URL이나 로컬 파일에서 보컬과 반주를 완벽하게 분리해주는 AI 기반 서비스 보컷(VoCut)입니다.">
+    <meta name="keywords" content="보컬 분리, 음성 분리, 반주 추출, 노래방 만들기, AI 오디오 분리, Spleeter">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --secondary: #EC4899;
+            --accent: #3B82F6;
+            --background: #0F172A;
+            --surface: rgba(30, 41, 59, 0.7);
+            --text: #F8FAFC;
+            --text-dim: #94A3B8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            border-radius: 50%;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-launch {
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Hero Section */
+        header {
+            padding: 6rem 5% 4rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #fff, #94A3B8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Features */
+        .features {
+            padding: 4rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* Step Section */
+        .steps {
+            padding: 6rem 5%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            text-align: left;
+            width: 100%;
+        }
+
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: rgba(139, 92, 246, 0.2);
+            line-height: 1;
+        }
+
+        .step-content h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .step-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">VoCut</div>
+        <a href="https://kim-kyowon.github.io/vocut/" class="btn-launch">실행하기</a>
+    </nav>
+
+    <header>
+        <h1><span class="gradient-text">완벽한 보컬 분리의 시작</span><br>당신의 음악을 깨우세요</h1>
+        <p>AI 기술을 활용해 어떤 곡이든 보컬과 반주를 완벽하게 분리합니다. YouTube 링크 하나면 충분합니다.</p>
+        <div class="cta-group">
+            <a href="https://kim-kyowon.github.io/vocut/" class="btn-launch" style="padding: 1rem 2.5rem; font-size: 1.1rem;">지금 무료로 시작하기</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="icon-box">🔗</div>
+            <h3>YouTube URL 지원</h3>
+            <p>번거로운 다운로드 없이 YouTube 링크만 입력하면 즉시 오디오를 추출하고 분리합니다.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon-box">📁</div>
+            <h3>로컬 파일 업로드</h3>
+            <p>보유하고 있는 MP3, WAV, M4A 등 다양한 오디오 파일을 업로드하여 처리할 수 있습니다.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon-box">⚡</div>
+            <h3>실시간 처리</h3>
+            <p>최신 AI 공학 기반의 빠른 속도와 실시간 진행 상태 확인 기능을 제공합니다.</p>
+        </div>
+    </section>
+
+    <section class="steps">
+        <h2 class="section-title">사용 방법</h2>
+        <div class="step-container">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h4>음원 선택</h4>
+                    <p>YouTube URL을 붙여넣거나 소장하고 있는 오디오 파일을 선택하세요.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h4>AI 분리 시작</h4>
+                    <p>분리 버튼을 누르면 AI가 보컬과 반주를 분리하기 시작합니다.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h4>결과 다운로드</h4>
+                    <p>분리가 완료되면 고음질의 보컬 파일과 반주 파일을 각각 다운로드할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">VoCut</div>
+        <p class="copyright">&copy; 2024 Kim-Kyowon. All rights reserved.</p>
+        <p class="copyright" style="margin-top: 0.5rem; font-size: 0.75rem;">Powered by Spleeter & FastAPI</p>
+    </footer>
+</body>
+</html>
