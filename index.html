@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,25 @@
     <meta name="keywords" content="보컬 분리, 음성 분리, 반주 추출, 노래방 만들기, AI 오디오 분리, Spleeter">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #8B5CF6;
+            --primary-light: #A78BFA;
             --secondary: #EC4899;
             --accent: #3B82F6;
-            --background: #0F172A;
-            --surface: rgba(30, 41, 59, 0.7);
-            --text: #F8FAFC;
-            --text-dim: #94A3B8;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --background: #FFFFFF;
+            --surface: #F8FAFC;
+            --text: #0F172A;
+            --text-dim: #475569;
+            --glass: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(139, 92, 246, 0.15);
+            --glow: rgba(139, 92, 246, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         * {
@@ -27,6 +35,10 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -47,36 +59,47 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 40%);
         }
 
         .blob {
             position: absolute;
             filter: blur(80px);
-            opacity: 0.4;
+            opacity: 0.3;
             border-radius: 50%;
-            animation: move 20s infinite alternate;
+            animation: move 25s infinite alternate ease-in-out;
         }
 
         .blob-1 {
-            width: 400px;
-            height: 400px;
+            width: 600px;
+            height: 600px;
             background: var(--primary);
-            top: -100px;
+            top: -200px;
             right: -100px;
         }
 
         .blob-2 {
-            width: 300px;
-            height: 300px;
+            width: 500px;
+            height: 500px;
             background: var(--secondary);
-            bottom: -50px;
-            left: -50px;
-            animation-delay: -5s;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -7s;
         }
 
         @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(50px, 50px) scale(1.1); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(60px, 30px) scale(1.05);
+            }
+
+            100% {
+                transform: translate(-30px, 60px) scale(0.95);
+            }
         }
 
         /* Nav */
@@ -84,216 +107,441 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
+            padding: 1rem 5%;
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 32px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text);
             letter-spacing: -0.5px;
         }
 
-        .btn-launch {
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-outline {
             padding: 0.6rem 1.2rem;
-            background: var(--primary);
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: rgba(139, 92, 246, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
             transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
         }
 
-        .btn-launch:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+            filter: brightness(1.1);
         }
 
         /* Hero Section */
         header {
-            padding: 6rem 5% 4rem;
+            padding: 8rem 5% 6rem;
             text-align: center;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: #F1F5F9;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2.5rem;
+        }
+
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 8vw, 4.2rem);
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1.5px;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+            color: #1e1b4b;
         }
 
         .gradient-text {
-            background: linear-gradient(to right, #fff, #94A3B8);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         header p {
-            font-size: 1.2rem;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto 2.5rem;
+            max-width: 750px;
+            margin: 0 auto 4rem;
+        }
+
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1.2rem 2.8rem;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn-large.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.25);
+        }
+
+        .btn-large.secondary {
+            background: white;
+            color: var(--text);
+            border: 2px solid #E2E8F0;
+        }
+
+        .btn-large:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Showcase Section */
+        .showcase {
+            padding: 4rem 5% 8rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .showcase-container {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 40px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+
+        .showcase-item {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: 0.5s;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            background: #F8FAFC;
+        }
+
+        .showcase-item:hover {
+            transform: scale(1.04) translateY(-8px);
+            box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25);
+        }
+
+        .showcase-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .showcase-caption {
+            padding: 1.5rem;
+            background: white;
+            text-align: center;
+            font-weight: 700;
+            color: var(--text);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Features */
         .features {
-            padding: 4rem 5%;
+            padding: 8rem 5%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .feature-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 2.5rem;
-            border-radius: 24px;
-            backdrop-filter: blur(20px);
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 3.5rem 2.5rem;
+            border-radius: 32px;
             transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            box-shadow: var(--shadow-sm);
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
         }
 
         .icon-box {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
+            width: 65px;
+            height: 65px;
+            background: #F5F3FF;
+            color: var(--primary);
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .feature-card h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
         }
 
         .feature-card p {
             color: var(--text-dim);
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         /* Step Section */
         .steps {
-            padding: 6rem 5%;
+            padding: 10rem 5%;
             text-align: center;
+            background: #F8FAFC;
         }
 
         .section-title {
-            font-size: 2.2rem;
+            font-size: clamp(2.2rem, 5vw, 2.8rem);
             font-weight: 800;
-            margin-bottom: 3rem;
+            margin-bottom: 5rem;
+            letter-spacing: -1px;
         }
 
         .step-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: white;
+            padding: 3.5rem 2rem;
+            border-radius: 32px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .step-card:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-num {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .step-card h4 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+
+        .step-card p {
+            color: var(--text-dim);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 12rem 5%;
+            text-align: center;
+            background: white;
+        }
+
+        .cta-content {
             max-width: 800px;
             margin: 0 auto;
         }
 
-        .step-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            text-align: left;
-            width: 100%;
-        }
-
-        .step-number {
-            font-size: 2.5rem;
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 800;
-            color: rgba(139, 92, 246, 0.2);
-            line-height: 1;
-        }
-
-        .step-content h4 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            letter-spacing: -1.5px;
         }
 
         /* Footer */
         footer {
-            padding: 4rem 5%;
+            padding: 6rem 5% 4rem;
+            background: white;
+            border-top: 1px solid #F1F5F9;
             text-align: center;
-            border-top: 1px solid var(--glass-border);
-            background: rgba(15, 23, 42, 0.5);
         }
 
         .footer-logo {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo img {
+            height: 28px;
+        }
+
+        .footer-logo span {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text);
         }
 
         .copyright {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             color: var(--text-dim);
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            .features {
+        /* Mobile */
+        @media (max-width: 1024px) {
+
+            .showcase-grid,
+            .step-container {
                 grid-template-columns: 1fr;
+                max-width: 600px;
             }
-            .step-item {
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 6rem 5% 4rem;
+            }
+
+            .cta-group {
                 flex-direction: column;
                 align-items: center;
-                text-align: center;
+            }
+
+            .btn-large {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="ambient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+    <div class="ambient-bg"></div>
 
     <nav>
-        <div class="logo">VoCut</div>
-        <a href="https://kim-kyowon.github.io/vocut/" class="btn-launch">실행하기</a>
+        <a href="#" class="logo-container">
+            <img src="assets/vocut_logo.png" alt="VoCut Logo" class="logo-img">
+            <span class="logo-text">VoCut</span>
+        </a>
+        <div class="nav-links">
+            <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
+                class="btn-outline">앱 다운로드</a>
+            <a href="http://vocut.site:8001/" class="btn-primary" target="_blank">웹 서비스</a>
+        </div>
     </nav>
 
     <header>
-        <h1><span class="gradient-text">완벽한 보컬 분리의 시작</span><br>당신의 음악을 깨우세요</h1>
-        <p>AI 기술을 활용해 어떤 곡이든 보컬과 반주를 완벽하게 분리합니다. YouTube 링크 하나면 충분합니다.</p>
+        <span class="badge">AI-Powered Audio Separation</span>
+        <h1><span class="gradient-text">완벽한 보컬 분리,</span><br>음악 창작의 새로운 표준</h1>
+        <p>어떤 곡이든 보컬과 반주를 완벽하게 분리하는 가장 쉬운 방법. 최신 인공지능 기술로 당신의 음악 작업을 혁신하세요.</p>
+
         <div class="cta-group">
-            <a href="https://kim-kyowon.github.io/vocut/" class="btn-launch" style="padding: 1rem 2.5rem; font-size: 1.1rem;">지금 무료로 시작하기</a>
+            <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">
+                <span>🌐</span> 웹사이트 바로가기
+            </a>
+            <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
+                class="btn-large secondary" target="_blank">
+                <span>📦</span> 앱 다운로드 하기
+            </a>
         </div>
     </header>
+
+    <section class="showcase">
+        <div class="showcase-container">
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <img src="screenshot/Youtube-01.jpg" alt="YouTube URL 입력">
+                    <div class="showcase-caption">유튜브 URL 직접 입력</div>
+                </div>
+                <div class="showcase-item">
+                    <img src="screenshot/upload.jpg" alt="파일 업로드">
+                    <div class="showcase-caption">간편한 파일 업로드</div>
+                </div>
+                <div class="showcase-item">
+                    <img src="screenshot/pitch-01.jpg" alt="결과 화면">
+                    <div class="showcase-caption">고품질 분리 결과</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="features">
         <div class="feature-card">
@@ -304,46 +552,56 @@
         <div class="feature-card">
             <div class="icon-box">📁</div>
             <h3>로컬 파일 업로드</h3>
-            <p>보유하고 있는 MP3, WAV, M4A 등 다양한 오디오 파일을 업로드하여 처리할 수 있습니다.</p>
+            <p>보유하고 있는 오디오 파일을 드래그 앤 드롭으로 간편하게 업로드하여 처리할 수 있습니다.</p>
         </div>
         <div class="feature-card">
             <div class="icon-box">⚡</div>
-            <h3>실시간 처리</h3>
-            <p>최신 AI 공학 기반의 빠른 속도와 실시간 진행 상태 확인 기능을 제공합니다.</p>
+            <h3>초고속 AI 엔진</h3>
+            <p>Spleeter 기반의 최적화된 엔진으로 수 초 내에 고해상도 오디오를 분리합니다.</p>
         </div>
     </section>
 
     <section class="steps">
-        <h2 class="section-title">사용 방법</h2>
+        <h2 class="section-title">누구나 할 수 있는 3단계</h2>
         <div class="step-container">
-            <div class="step-item">
-                <div class="step-number">01</div>
-                <div class="step-content">
-                    <h4>음원 선택</h4>
-                    <p>YouTube URL을 붙여넣거나 소장하고 있는 오디오 파일을 선택하세요.</p>
-                </div>
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h4>준비</h4>
+                <p>YouTube URL을 붙여넣거나 파일을 업로드하세요.</p>
             </div>
-            <div class="step-item">
-                <div class="step-number">02</div>
-                <div class="step-content">
-                    <h4>AI 분리 시작</h4>
-                    <p>분리 버튼을 누르면 AI가 보컬과 반주를 분리하기 시작합니다.</p>
-                </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h4>분리</h4>
+                <p>AI가 보컬과 반주를 마법처럼 분리합니다.</p>
             </div>
-            <div class="step-item">
-                <div class="step-number">03</div>
-                <div class="step-content">
-                    <h4>결과 다운로드</h4>
-                    <p>분리가 완료되면 고음질의 보컬 파일과 반주 파일을 각각 다운로드할 수 있습니다.</p>
-                </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h4>완료</h4>
+                <p>고품질 파일을 내려받아 창작에 활용하세요.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>보컷과 함께 시작하세요</h2>
+            <p style="margin-bottom: 4rem; color: var(--text-dim); font-size: 1.3rem;">지금 바로 여러분의 음악을 분리해 보세요. 별도의 설치 없이
+                브라우저에서 즉시 시작할 수 있습니다.</p>
+            <div class="cta-group">
+                <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">지금 실행하기</a>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-logo">VoCut</div>
+        <div class="footer-logo">
+            <img src="assets/vocut_logo.png" alt="VoCut">
+            <span>VoCut</span>
+        </div>
         <p class="copyright">&copy; 2024 Kim-Kyowon. All rights reserved.</p>
-        <p class="copyright" style="margin-top: 0.5rem; font-size: 0.75rem;">Powered by Spleeter & FastAPI</p>
+        <p class="copyright" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.6;">Powered by Spleeter & FastAPI
+        </p>
     </footer>
 </body>
+
 </html>
