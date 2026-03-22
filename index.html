@@ -251,6 +251,22 @@
             transform: translateY(-4px);
         }
 
+        .btn-text {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .main-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .sub-text {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
         /* Showcase Section */
         .showcase {
             padding: 4rem 5% 8rem;
@@ -481,13 +497,31 @@
             }
 
             .cta-group {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
+                gap: 0.6rem;
+                justify-content: center;
+                flex-wrap: nowrap;
             }
 
             .btn-large {
-                width: 100%;
+                flex: 1;
+                padding: 0.7rem 0.4rem;
+                font-size: 0.8rem;
+                gap: 0.4rem;
                 justify-content: center;
+                min-width: 0;
+            }
+
+            .main-text {
+                font-size: 0.9rem;
+            }
+
+            .sub-text {
+                font-size: 0.65rem;
+            }
+
+            .btn-large span {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -503,7 +537,8 @@
         </a>
         <div class="nav-links">
             <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
-                class="btn-outline">앱 다운로드</a>
+                class="btn-outline">앱 다운로드 <span
+                    style="font-size: 0.7rem; opacity: 0.8; font-weight: 400;">(Android)</span></a>
             <a href="http://vocut.site:8001/" class="btn-primary" target="_blank">웹 서비스</a>
         </div>
     </nav>
@@ -515,11 +550,19 @@
 
         <div class="cta-group">
             <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">
-                <span>🌐</span> 웹사이트 바로가기
+                <span>🌐</span>
+                <div class="btn-text">
+                    <div class="main-text">웹사이트</div>
+                    <div class="sub-text">바로가기</div>
+                </div>
             </a>
             <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
                 class="btn-large secondary" target="_blank">
-                <span>📦</span> 앱 다운로드 하기
+                <span>📦</span>
+                <div class="btn-text">
+                    <div class="main-text">앱 다운로드</div>
+                    <div class="sub-text">Android 전용</div>
+                </div>
             </a>
         </div>
     </header>
@@ -588,7 +631,21 @@
             <p style="margin-bottom: 4rem; color: var(--text-dim); font-size: 1.3rem;">지금 바로 여러분의 음악을 분리해 보세요. 별도의 설치 없이
                 브라우저에서 즉시 시작할 수 있습니다.</p>
             <div class="cta-group">
-                <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">지금 실행하기</a>
+                <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">
+                    <span>🌐</span>
+                    <div class="btn-text">
+                        <div class="main-text">웹사이트</div>
+                        <div class="sub-text">바로가기</div>
+                    </div>
+                </a>
+                <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
+                    class="btn-large secondary" target="_blank">
+                    <span>📦</span>
+                    <div class="btn-text">
+                        <div class="main-text">앱 다운로드</div>
+                        <div class="sub-text">Android 전용</div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -598,7 +655,7 @@
             <img src="assets/vocut_logo.png" alt="VoCut">
             <span>VoCut</span>
         </div>
-        <p class="copyright">&copy; 2024 Kim-Kyowon. All rights reserved.</p>
+        <p class="copyright">&copy; 2026 Kim-Kyowon. All rights reserved.</p>
         <p class="copyright" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.6;">Powered by Spleeter & FastAPI
         </p>
     </footer>
