@@ -450,6 +450,37 @@
             letter-spacing: -1.5px;
         }
 
+        .contact-box {
+            margin-top: 4rem;
+            padding: 1.5rem 2.5rem;
+            background: #F8FAFC;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            border-radius: 24px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .contact-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .contact-box p {
+            margin-bottom: 0.4rem !important;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        .contact-box a {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
         /* Footer */
         footer {
             padding: 6rem 5% 4rem;
@@ -673,6 +704,10 @@
                     </div>
                 </a>
             </div>
+            <div class="contact-box">
+                <p>오류 제보 및 문의</p>
+                <a href="mailto:pbus11kw@gmail.com">pbus11kw@gmail.com</a>
+            </div>
         </div>
     </section>
 
@@ -682,10 +717,6 @@
             <span>VoCut</span>
         </div>
         <p class="copyright">&copy; 2026 Kim-Kyowon. All rights reserved.</p>
-        <p class="copyright" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.6;">
-            오류 제보 및 문의: <a href="mailto:pbus11kw@gmail.com"
-                style="color: inherit; text-decoration: underline;">pbus11kw@gmail.com</a>
-        </p>
         <p class="copyright" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.6;">Powered by Spleeter & FastAPI
         </p>
     </footer>
