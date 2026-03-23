@@ -2,6 +2,15 @@
 <html lang="ko">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RF6XH1434R"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RF6XH1434R');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>보컷 (VoCut) - AI 음성/보컬 분리 서비스</title>
@@ -594,9 +603,10 @@
         </a>
         <div class="nav-links">
             <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
-                class="btn-outline">앱 다운로드 <span
+                class="btn-outline" onclick="gtag('event', 'apk_download');">앱 다운로드 <span
                     style="font-size: 0.7rem; opacity: 0.8; font-weight: 400;">(Android)</span></a>
-            <a href="http://vocut.site:8001/" class="btn-primary" target="_blank">웹 서비스</a>
+            <a href="http://vocut.site:8001/" class="btn-primary" onclick="gtag('event', 'visit_site');"
+                target="_blank">웹 서비스</a>
         </div>
     </nav>
 
@@ -606,7 +616,8 @@
         <p>어떤 곡이든 보컬과 반주를 완벽하게 분리하는 가장 쉬운 방법. 최신 인공지능 기술로 당신의 음악 작업을 혁신하세요.</p>
 
         <div class="cta-group">
-            <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">
+            <a href="http://vocut.site:8001/" class="btn-large primary" onclick="gtag('event', 'visit_site');"
+                target="_blank">
                 <span>🌐</span>
                 <div class="btn-text">
                     <div class="main-text">웹사이트</div>
@@ -614,7 +625,7 @@
                 </div>
             </a>
             <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
-                class="btn-large secondary" target="_blank">
+                class="btn-large secondary" onclick="gtag('event', 'apk_download');" target="_blank">
                 <span>📦</span>
                 <div class="btn-text">
                     <div class="main-text">앱 다운로드</div>
@@ -688,7 +699,8 @@
             <p style="margin-bottom: 4rem; color: var(--text-dim); font-size: 1.3rem;">지금 바로 여러분의 음악을 분리해 보세요. 별도의 설치 없이
                 브라우저에서 즉시 시작할 수 있습니다.</p>
             <div class="cta-group">
-                <a href="http://vocut.site:8001/" class="btn-large primary" target="_blank">
+                <a href="http://vocut.site:8001/" class="btn-large primary" onclick="gtag('event', 'visit_site');"
+                    target="_blank">
                     <span>🌐</span>
                     <div class="btn-text">
                         <div class="main-text">웹사이트</div>
@@ -696,7 +708,7 @@
                     </div>
                 </a>
                 <a href="https://github.com/Kim-Kyowon/vocut-landing/releases/download/v0.2/vocut_app_v0.2.apk"
-                    class="btn-large secondary" target="_blank">
+                    class="btn-large secondary" onclick="gtag('event', 'apk_download');" target="_blank">
                     <span>📦</span>
                     <div class="btn-text">
                         <div class="main-text">앱 다운로드</div>
